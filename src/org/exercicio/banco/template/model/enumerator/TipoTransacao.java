@@ -1,11 +1,13 @@
 package org.exercicio.banco.template.model.enumerator;
 
-public enum TipoTransacao {
+import java.io.Serializable;
 
-	SAQUE(1),
-	DEPOSITO(2),
-	TRANSFERENCIA_DEBITADO(3),
-	TRANSFERENCIA_CREDITADO(4);
+public enum TipoTransacao implements Serializable{
+
+	CREDITO(1),
+	DEBITO(2),
+	TRANSACAO_CREDITO(3),
+	TRANSACAO_DEBITO(4);
 	
 	private final int valor;
 	
@@ -17,12 +19,11 @@ public enum TipoTransacao {
 		return valor;
 	}
 	
-	public static TipoTransacao getTipoFromNumero(int valor) {
+	public static TipoTransacao transacaoFromValor(int valor) {
 		for(TipoTransacao t : values()) {
 			if(t.getValor() == valor)
 				return t;
 		}
 		return null;
 	}
-	
 }

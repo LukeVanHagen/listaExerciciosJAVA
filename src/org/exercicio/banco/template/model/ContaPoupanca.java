@@ -4,29 +4,29 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
-import java.time.format.DateTimeFormatter;
-
 import org.exercicio.banco.template.model.enumerator.TipoTransacao;
-import org.exercicio.banco.template.persistence.PersistenciaEmArquivo;
 
-public class ContaBancaria implements Serializable {
+public class ContaPoupanca implements Serializable , IConta {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	
 	private Integer numeroConta;
 	private BigDecimal saldo;
 	private LocalDateTime dataAbertura;
 	private boolean status;
-	List<RegistroTransacao> transacoes;
+	private List<RegistroTransacao> transacoes;
 
-	public ContaBancaria() {
+	public ContaPoupanca() {
 		this.numeroConta = new Random().nextInt(999999999);
 		this.saldo = BigDecimal.ZERO;
 		saldo.setScale(4, RoundingMode.HALF_UP);
@@ -34,7 +34,7 @@ public class ContaBancaria implements Serializable {
 		this.status = true;
 		transacoes = new ArrayList<>();
 	}
-
+	
 	public Integer getNumeroConta() {
 		return numeroConta;
 	}
@@ -47,7 +47,7 @@ public class ContaBancaria implements Serializable {
 		return saldo;
 	}
 
-	public void setSaldo(BigDecimal saldo) {
+	private void setSaldo(BigDecimal saldo) {
 		this.saldo = saldo;
 	}
 
@@ -70,6 +70,7 @@ public class ContaBancaria implements Serializable {
 	public List<RegistroTransacao> getTransacoes() {
 		return transacoes;
 	}
+	
 
 	@Override
 	public int hashCode() {
@@ -84,17 +85,19 @@ public class ContaBancaria implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ContaBancaria other = (ContaBancaria) obj;
+		ContaPoupanca other = (ContaPoupanca) obj;
 		return Objects.equals(numeroConta, other.numeroConta);
 	}
 
 	@Override
 	public String toString() {
-		return "ContaBancaria [numeroConta=" + numeroConta + ", saldo=" + saldo + ", dataAbertura=" + dataAbertura
-				+ ", status=" + status + "]";
+		return "ContaPoupanca [numeroConta=" + numeroConta + ", saldo=" + saldo + ", dataAbertura=" + dataAbertura
+				+ ", status=" + status + ", transacoes=" + transacoes + "]";
 	}
 
+	@Override
 	public void depositar(BigDecimal quantia) {
+		
 		if (status) {
 			if (quantia.compareTo(BigDecimal.ZERO) > 0) {
 				this.saldo = this.saldo.add(quantia);
@@ -108,10 +111,12 @@ public class ContaBancaria implements Serializable {
 			System.err.println("Operação não permitida. Conta desativada.");
 
 		}
-
+		
 	}
 
+	@Override
 	public void sacar(BigDecimal quantia) {
+		
 		if (status) {
 			if (quantia.compareTo(BigDecimal.ZERO) > 0) {
 				if (this.saldo.compareTo(quantia) > 0) {
@@ -127,10 +132,12 @@ public class ContaBancaria implements Serializable {
 		} else {
 			System.err.println("Operação não permitida. Conta desativada.");
 		}
-
+		
 	}
 
+	@Override
 	public void transferir(ContaBancaria c, BigDecimal quantia) {
+		
 		if (status && c.isStatus()) {
 			if (quantia.compareTo(BigDecimal.ZERO) < 0) {
 				System.err.println("Valor invalido para transferencia.");
@@ -144,12 +151,12 @@ public class ContaBancaria implements Serializable {
 		} else {
 			System.err.println("Operacao nao pode ser realizada entre contas desativadas.");
 		}
-
-	}
-	
-	public void imprimirExtratoConta(int mes, int year) {
 		
-	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+	}
+
+	@Override
+	public void imprimirExtratoConta(int mes, int year) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
 	    System.out.println("Extrato da Conta: " + numeroConta);
 	    System.out.println("Mês/Ano: " + mes + "/" + year);
@@ -165,5 +172,7 @@ public class ContaBancaria implements Serializable {
 	        }
 	    }
 	}
+		
+	}
 
-}
+

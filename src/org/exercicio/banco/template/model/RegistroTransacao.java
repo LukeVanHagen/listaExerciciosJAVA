@@ -1,31 +1,31 @@
 package org.exercicio.banco.template.model;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Random;
 
 import org.exercicio.banco.template.model.enumerator.TipoTransacao;
 
-public class RegistroTransacao {
+public class RegistroTransacao implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Integer id;
-	private LocalDateTime dataTransacao;
-	private double valor;
+	private BigDecimal valor;
 	private TipoTransacao tipo;
+	private LocalDateTime dataTransacao;
+
 	
-	private static int CONTADOR = 0;
-	
-	public RegistroTransacao(LocalDateTime data, double valor, TipoTransacao tipo) {
-	
-		CONTADOR++;
-		this.id = CONTADOR;
-		this.dataTransacao = data;
+	public RegistroTransacao(BigDecimal valor, TipoTransacao tipo, LocalDateTime data) {
+		this.id = new Random().nextInt(999999999);
+		this.valor = valor;
 		this.tipo = tipo;
-		
-		if(tipo.getValor() == 1 || tipo.getValor() == 3) {
-			this.valor = (valor*-1);
-		}else
-			this.valor = valor;
-		
+		this.dataTransacao= dataTransacao;
+
 	}
 
 	public Integer getId() {
@@ -36,19 +36,11 @@ public class RegistroTransacao {
 		this.id = id;
 	}
 
-	public LocalDateTime getDataTransacao() {
-		return dataTransacao;
-	}
-
-	public void setDataTransacao(LocalDateTime dataTransacao) {
-		this.dataTransacao = dataTransacao;
-	}
-
-	public double getValor() {
+	public BigDecimal getValor() {
 		return valor;
 	}
 
-	public void setValor(double valor) {
+	public void setValor(BigDecimal valor) {
 		this.valor = valor;
 	}
 
@@ -60,23 +52,17 @@ public class RegistroTransacao {
 		this.tipo = tipo;
 	}
 
-	public static int getCONTADOR() {
-		return CONTADOR;
+	public LocalDateTime getData() {
+		return dataTransacao;
 	}
 
-	public static void setCONTADOR(int cONTADOR) {
-		CONTADOR = cONTADOR;
-	}
-
-	@Override
-	public String toString() {
-		return "RegistroTransacao [id=" + id + ", dataTransacao=" + dataTransacao + ", valor=" + valor + ", tipo="
-				+ tipo + "]";
+	public void setData(LocalDateTime data) {
+		this.dataTransacao = data;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(dataTransacao, id, tipo, valor);
 	}
 
 	@Override
@@ -88,8 +74,48 @@ public class RegistroTransacao {
 		if (getClass() != obj.getClass())
 			return false;
 		RegistroTransacao other = (RegistroTransacao) obj;
-		return Objects.equals(id, other.id);
+		return Objects.equals(dataTransacao, other.dataTransacao) && Objects.equals(id, other.id) && tipo == other.tipo
+				&& Objects.equals(valor, other.valor);
+	}
+
+	@Override
+	public String toString() {
+		return "RegistroTransacao [id=" + id + ", valor=" + valor + ", tipo=" + tipo + ", data=" + dataTransacao + "]";
+	}
+
+	public LocalDateTime getDataTransacao() {
+		
+		return dataTransacao;
+	}
+
+	public String getDescricao() {
+		
+        String descricao;
+
+        switch (tipo) {
+            case CREDITO:
+                descricao = "Crédito";
+                break;
+            case DEBITO:
+                descricao = "Débito";
+                break;
+            case TRANSACAO_CREDITO:
+                descricao = "Transferência Recebida";
+                break;
+            case TRANSACAO_DEBITO:
+                descricao = "Transferência Enviada";
+                break;
+            default:
+                descricao = "Desconhecido";
+        }
+
+        return descricao;
+    }
+	
 	}
 	
 	
-}
+	
+	
+	
+
