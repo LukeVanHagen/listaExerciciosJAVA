@@ -15,7 +15,7 @@ public class ContaCorrente implements IConta {
 	private LocalDateTime dataAbertura;
 	private boolean status;
 	private List<RegistroTransacao> transacoes;
-	public final BigDecimal TAXA_TRANSACAO_CORRENTE_SAQUE = new BigDecimal("0.99");// adicionando uma taxa 
+	public final BigDecimal TAXA_TRANSACAO_CORRENTE_SAQUE = new BigDecimal("0.99");
 																					
 	public final BigDecimal TAXA_TRANSACAO_CORRENTE_TRANSFERENCIA = new BigDecimal("0.75");
 
@@ -118,7 +118,7 @@ public class ContaCorrente implements IConta {
 		if (status && isStatus()) {
 			if (quantia.compareTo(BigDecimal.ZERO) < 0) {
 				System.out.println("Valor inválido para transferência.");
-			} else if (quantia.compareTo(saldo) <= 0) {// se o valor a ser enviado for menor que o saldo do dito cujo
+			} else if (quantia.compareTo(saldo) <= 0) {
 				setSaldo(saldo.subtract(quantia));
 				contaDestino.depositar(quantia);
 				RegistroTransacao transacao = new RegistroTransacao(quantia, TipoTransacao.TRANSFERENCIA_CREDITO,
@@ -165,10 +165,8 @@ public class ContaCorrente implements IConta {
 		if (status) {
 			if (quantia.compareTo(BigDecimal.ZERO) > 0) {
 				if (this.saldo.compareTo(quantia) > 0) {
-					this.saldo = this.saldo.subtract(quantia.add(TAXA_TRANSACAO_CORRENTE_SAQUE));// aqui eu adiciono a
-																									// taxa de transação
-																									// no momento em que
-																									// é feito o saque
+					this.saldo = this.saldo.subtract(quantia.add(TAXA_TRANSACAO_CORRENTE_SAQUE));
+					
 					transacoes.add(new RegistroTransacao(quantia, TipoTransacao.SAQUE, TipoConta.CONTA_POUPANCA,
 							LocalDateTime.now()));
 					System.out.println("Operação realizada com sucesso");

@@ -110,10 +110,8 @@ public class ContaPoupanca implements IConta {
 		if (status) {
 			if (quantia.compareTo(BigDecimal.ZERO) > 0) {
 				if (this.saldo.compareTo(quantia) > 0) {
-					this.saldo = this.saldo.subtract(quantia.add(TAXA_TRANSACAO_POUPANCA_SAQUE));// aqui eu adiciono a
-																									// taxa de transação
-																									// no momento em que
-																									// é feito o saque
+					this.saldo = this.saldo.subtract(quantia.add(TAXA_TRANSACAO_POUPANCA_SAQUE));
+					
 					transacoes.add(new RegistroTransacao(quantia, TipoTransacao.SAQUE, TipoConta.CONTA_POUPANCA,
 							LocalDateTime.now()));
 					System.out.println("Operação realizada com sucesso");
@@ -132,15 +130,12 @@ public class ContaPoupanca implements IConta {
 		if (status && isStatus()) {
 			if (quantia.compareTo(BigDecimal.ZERO) < 0) {
 				System.out.println("Valor inválido para transferência.");
-			} else if (quantia.compareTo(saldo) <= 0) {// se o valor a ser enviado for menor que o saldo do dito cujo
+			} else if (quantia.compareTo(saldo) <= 0) {
 				setSaldo(saldo.subtract(quantia));
 				contaDestino.depositar(quantia);
 				RegistroTransacao transacao = new RegistroTransacao(quantia, TipoTransacao.TRANSFERENCIA_CREDITO,
 						TipoConta.CONTA_POUPANCA, LocalDateTime.now());
-				contaDestino.getTransacoes().add(transacao);// a conta deve possuir esse método(getTransacoes)
-				// Se for uma conta poupanca(especificando o parametro da conta de destino):
-				// ((ContaPoupanca) contaDestino).getTransacoes().add(transacao);//a conta deve
-				// possuir esse método(getTransacoes)
+				contaDestino.getTransacoes().add(transacao);
 				transacoes.add(new RegistroTransacao(quantia, TipoTransacao.TRASNFERENCIA_DEBITO,
 						TipoConta.CONTA_POUPANCA, LocalDateTime.now()));
 			} else {

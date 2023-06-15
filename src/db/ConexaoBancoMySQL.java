@@ -22,11 +22,11 @@ public class ConexaoBancoMySQL implements IConnection {
 		DB_PASSWORD = ConfigLoader.loadConfig().getProperty("DB_PASSWORD");
 	}
 
-	private Connection connection; //declaração de atributo
+	private Connection connection; 
 	@Override
 	public Connection getConnection() {
 		try {
-			connection = DriverManager.getConnection("jdbc:mysql://"+DB_ADDRESS+":"+DB_PORT+"/"+DB_SCHEMA, DB_USER, DB_PASSWORD);//Conexão propriamente dita
+			connection = DriverManager.getConnection("jdbc:mysql://"+DB_ADDRESS+":"+DB_PORT+"/"+DB_SCHEMA, DB_USER, DB_PASSWORD);
 			return connection;
 		} catch(SQLException e) {
 			e.printStackTrace();

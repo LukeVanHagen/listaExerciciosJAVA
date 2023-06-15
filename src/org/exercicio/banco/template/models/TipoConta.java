@@ -14,7 +14,7 @@ public enum TipoConta {
 		return valor;
 	}
 
-	public static TipoConta transacaoFromValor(int valor) {// busca do tipo de transação
+	public static TipoConta transacaoFromValor(int valor) {
 		for (TipoConta t : values()) {
 			if (t.getValor() == valor)
 				return t;
